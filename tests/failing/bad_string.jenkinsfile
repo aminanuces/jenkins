@@ -1,0 +1,10 @@
+pipeline {
+  agent any
+  stages {
+    stage("BadString") {
+      steps {
+        echo "This string is not closed
+      }
+    }
+  }
+}

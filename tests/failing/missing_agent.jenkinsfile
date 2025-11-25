@@ -1,0 +1,10 @@
+pipeline {
+  // missing agent: should be reported as error by parser
+  stages {
+    stage("NoAgent") {
+      steps {
+        echo "This pipeline has no agent"
+      }
+    }
+  }
+}

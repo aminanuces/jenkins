@@ -1,0 +1,2166 @@
+Terminals which are not used
+
+   TIMEOUT
+   RETRY
+   INT
+   INCR
+
+
+State 62 conflicts: 2 shift/reduce
+State 80 conflicts: 1 shift/reduce
+State 86 conflicts: 2 shift/reduce
+State 110 conflicts: 4 shift/reduce
+State 111 conflicts: 4 shift/reduce
+State 112 conflicts: 4 shift/reduce
+State 113 conflicts: 4 shift/reduce
+State 114 conflicts: 9 reduce/reduce
+State 117 conflicts: 9 reduce/reduce
+State 125 conflicts: 4 shift/reduce
+State 143 conflicts: 9 reduce/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: /* empty */
+    2        | program pipeline
+
+    3 pipeline: PIPELINE '{' pipeline_items '}'
+
+    4 pipeline_items: /* empty */
+    5               | pipeline_items pipeline_item
+
+    6 pipeline_item: agent
+    7              | environment
+    8              | options
+    9              | stages
+   10              | post
+
+   11 agent_value: ANY
+   12            | STRING
+
+   13 agent: AGENT agent_value
+   14      | AGENT '{' agent_directives '}'
+
+   15 agent_directives: /* empty */
+   16                 | agent_directives agent_directive
+
+   17 agent_directive: LABEL STRING
+
+   18 environment: ENVIRONMENT '{' env_list '}'
+
+   19 env_list: /* empty */
+   20         | env_list env_assign
+
+   21 env_assign: IDENTIFIER '=' expression
+
+   22 options: OPTIONS '{' option_list '}'
+
+   23 option_list: /* empty */
+   24            | option_list option
+
+   25 option: IDENTIFIER '(' call_args_opt ')'
+
+   26 call_args_opt: /* empty */
+   27              | call_args
+
+   28 call_args: call_arg
+   29          | call_args ',' call_arg
+
+   30 call_arg: expression
+   31         | IDENTIFIER ':' expression
+
+   32 named_args: named_arg
+   33           | named_args ',' named_arg
+
+   34 named_arg: IDENTIFIER ':' expression
+
+   35 post: POST '{' post_list '}'
+
+   36 post_list: /* empty */
+   37          | post_list post_clause
+
+   38 post_clause: SUCCESS '{' statement_list '}'
+   39            | FAILURE '{' statement_list '}'
+   40            | ALWAYS '{' statement_list '}'
+   41            | UNSTABLE '{' statement_list '}'
+
+   42 stages: STAGES '{' stage_list '}'
+
+   43 stage_list: stage_list stage
+   44           | stage
+
+   45 stage: STAGE '(' STRING ')' '{' steps '}'
+
+   46 steps: STEPS '{' step_list '}'
+
+   47 step_list: step_list step
+   48          | step
+
+   49 step: ECHO STRING
+   50     | SH STRING
+   51     | SCRIPT '{' script_body '}'
+
+   52 script_body: statement_list
+
+   53 statement_list: /* empty */
+   54               | statement_list statement
+
+   55 statement: if_statement
+   56          | assignment
+   57          | expression_stmt
+   58          | declaration
+   59          | ident_call_stmt
+   60          | for_statement
+
+   61 if_statement: IF '(' expression ')' '{' statement_list '}'
+   62             | IF '(' expression ')' '{' statement_list '}' ELSE '{' statement_list '}'
+
+   63 assignment: IDENTIFIER '=' expression
+
+   64 declaration: DEF IDENTIFIER '=' expression
+
+   65 ident_call_stmt: IDENTIFIER '(' call_args_opt ')'
+   66                | IDENTIFIER named_args
+   67                | IDENTIFIER STRING
+
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt ';' for_update_opt ')' '{' statement_list '}'
+
+   69 for_init_opt: /* empty */
+   70             | for_init
+
+   71 for_init: declaration
+   72         | assignment
+   73         | expression
+
+   74 for_cond_opt: /* empty */
+   75             | expression
+
+   76 for_update_opt: /* empty */
+   77               | expression
+   78               | assignment
+
+   79 expression_stmt: expression
+
+   80 expression: IDENTIFIER
+   81           | STRING
+   82           | NUMBER
+   83           | TRUE
+   84           | FALSE
+   85           | IDENTIFIER '(' call_args_opt ')'
+   86           | IDENTIFIER named_args
+   87           | IDENTIFIER STRING
+   88           | expression '<' expression
+   89           | expression '>' expression
+   90           | expression EQEQ expression
+   91           | expression NEQ expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 25 45 61 62 65 68 85
+')' (41) 25 45 61 62 65 68 85
+',' (44) 29 33
+':' (58) 31 34
+';' (59) 68
+'<' (60) 88
+'=' (61) 21 63 64
+'>' (62) 89
+'{' (123) 3 14 18 22 35 38 39 40 41 42 45 46 51 61 62 68
+'}' (125) 3 14 18 22 35 38 39 40 41 42 45 46 51 61 62 68
+error (256)
+STRING (258) 12 17 45 49 50 67 81 87
+IDENTIFIER (259) 21 25 31 34 63 64 65 66 67 80 85 86 87
+NUMBER (260) 82
+PIPELINE (261) 3
+AGENT (262) 13 14
+STAGES (263) 42
+STAGE (264) 45
+STEPS (265) 46
+ECHO (266) 49
+SH (267) 50
+SCRIPT (268) 51
+IF (269) 61 62
+ELSE (270) 62
+TRUE (271) 83
+FALSE (272) 84
+ANY (273) 11
+ENVIRONMENT (274) 18
+POST (275) 35
+OPTIONS (276) 22
+TIMEOUT (277)
+RETRY (278)
+LABEL (279) 17
+DEF (280) 64
+INT (281)
+FOR (282) 68
+INCR (283)
+EQEQ (284) 90
+NEQ (285) 91
+SUCCESS (286) 38
+FAILURE (287) 39
+ALWAYS (288) 40
+UNSTABLE (289) 41
+
+
+Nonterminals, with rules where they appear
+
+$accept (45)
+    on left: 0
+program (46)
+    on left: 1 2, on right: 0 2
+pipeline (47)
+    on left: 3, on right: 2
+pipeline_items (48)
+    on left: 4 5, on right: 3 5
+pipeline_item (49)
+    on left: 6 7 8 9 10, on right: 5
+agent_value (50)
+    on left: 11 12, on right: 13
+agent (51)
+    on left: 13 14, on right: 6
+agent_directives (52)
+    on left: 15 16, on right: 14 16
+agent_directive (53)
+    on left: 17, on right: 16
+environment (54)
+    on left: 18, on right: 7
+env_list (55)
+    on left: 19 20, on right: 18 20
+env_assign (56)
+    on left: 21, on right: 20
+options (57)
+    on left: 22, on right: 8
+option_list (58)
+    on left: 23 24, on right: 22 24
+option (59)
+    on left: 25, on right: 24
+call_args_opt (60)
+    on left: 26 27, on right: 25 65 85
+call_args (61)
+    on left: 28 29, on right: 27 29
+call_arg (62)
+    on left: 30 31, on right: 28 29
+named_args (63)
+    on left: 32 33, on right: 33 66 86
+named_arg (64)
+    on left: 34, on right: 32 33
+post (65)
+    on left: 35, on right: 10
+post_list (66)
+    on left: 36 37, on right: 35 37
+post_clause (67)
+    on left: 38 39 40 41, on right: 37
+stages (68)
+    on left: 42, on right: 9
+stage_list (69)
+    on left: 43 44, on right: 42 43
+stage (70)
+    on left: 45, on right: 43 44
+steps (71)
+    on left: 46, on right: 45
+step_list (72)
+    on left: 47 48, on right: 46 47
+step (73)
+    on left: 49 50 51, on right: 47 48
+script_body (74)
+    on left: 52, on right: 51
+statement_list (75)
+    on left: 53 54, on right: 38 39 40 41 52 54 61 62 68
+statement (76)
+    on left: 55 56 57 58 59 60, on right: 54
+if_statement (77)
+    on left: 61 62, on right: 55
+assignment (78)
+    on left: 63, on right: 56 72 78
+declaration (79)
+    on left: 64, on right: 58 71
+ident_call_stmt (80)
+    on left: 65 66 67, on right: 59
+for_statement (81)
+    on left: 68, on right: 60
+for_init_opt (82)
+    on left: 69 70, on right: 68
+for_init (83)
+    on left: 71 72 73, on right: 70
+for_cond_opt (84)
+    on left: 74 75, on right: 68
+for_update_opt (85)
+    on left: 76 77 78, on right: 68
+expression_stmt (86)
+    on left: 79, on right: 57
+expression (87)
+    on left: 80 81 82 83 84 85 86 87 88 89 90 91, on right: 21 30 31
+    34 61 62 63 64 73 75 77 79 88 89 90 91
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 1
+
+
+state 1
+
+    0 $accept: program . $end
+    2 program: program . pipeline
+
+    $end      shift, and go to state 2
+    PIPELINE  shift, and go to state 3
+
+    pipeline  go to state 4
+
+
+state 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 3
+
+    3 pipeline: PIPELINE . '{' pipeline_items '}'
+
+    '{'  shift, and go to state 5
+
+
+state 4
+
+    2 program: program pipeline .
+
+    $default  reduce using rule 2 (program)
+
+
+state 5
+
+    3 pipeline: PIPELINE '{' . pipeline_items '}'
+
+    $default  reduce using rule 4 (pipeline_items)
+
+    pipeline_items  go to state 6
+
+
+state 6
+
+    3 pipeline: PIPELINE '{' pipeline_items . '}'
+    5 pipeline_items: pipeline_items . pipeline_item
+
+    AGENT        shift, and go to state 7
+    STAGES       shift, and go to state 8
+    ENVIRONMENT  shift, and go to state 9
+    POST         shift, and go to state 10
+    OPTIONS      shift, and go to state 11
+    '}'          shift, and go to state 12
+
+    pipeline_item  go to state 13
+    agent          go to state 14
+    environment    go to state 15
+    options        go to state 16
+    post           go to state 17
+    stages         go to state 18
+
+
+state 7
+
+   13 agent: AGENT . agent_value
+   14      | AGENT . '{' agent_directives '}'
+
+    STRING  shift, and go to state 19
+    ANY     shift, and go to state 20
+    '{'     shift, and go to state 21
+
+    agent_value  go to state 22
+
+
+state 8
+
+   42 stages: STAGES . '{' stage_list '}'
+
+    '{'  shift, and go to state 23
+
+
+state 9
+
+   18 environment: ENVIRONMENT . '{' env_list '}'
+
+    '{'  shift, and go to state 24
+
+
+state 10
+
+   35 post: POST . '{' post_list '}'
+
+    '{'  shift, and go to state 25
+
+
+state 11
+
+   22 options: OPTIONS . '{' option_list '}'
+
+    '{'  shift, and go to state 26
+
+
+state 12
+
+    3 pipeline: PIPELINE '{' pipeline_items '}' .
+
+    $default  reduce using rule 3 (pipeline)
+
+
+state 13
+
+    5 pipeline_items: pipeline_items pipeline_item .
+
+    $default  reduce using rule 5 (pipeline_items)
+
+
+state 14
+
+    6 pipeline_item: agent .
+
+    $default  reduce using rule 6 (pipeline_item)
+
+
+state 15
+
+    7 pipeline_item: environment .
+
+    $default  reduce using rule 7 (pipeline_item)
+
+
+state 16
+
+    8 pipeline_item: options .
+
+    $default  reduce using rule 8 (pipeline_item)
+
+
+state 17
+
+   10 pipeline_item: post .
+
+    $default  reduce using rule 10 (pipeline_item)
+
+
+state 18
+
+    9 pipeline_item: stages .
+
+    $default  reduce using rule 9 (pipeline_item)
+
+
+state 19
+
+   12 agent_value: STRING .
+
+    $default  reduce using rule 12 (agent_value)
+
+
+state 20
+
+   11 agent_value: ANY .
+
+    $default  reduce using rule 11 (agent_value)
+
+
+state 21
+
+   14 agent: AGENT '{' . agent_directives '}'
+
+    $default  reduce using rule 15 (agent_directives)
+
+    agent_directives  go to state 27
+
+
+state 22
+
+   13 agent: AGENT agent_value .
+
+    $default  reduce using rule 13 (agent)
+
+
+state 23
+
+   42 stages: STAGES '{' . stage_list '}'
+
+    STAGE  shift, and go to state 28
+
+    stage_list  go to state 29
+    stage       go to state 30
+
+
+state 24
+
+   18 environment: ENVIRONMENT '{' . env_list '}'
+
+    $default  reduce using rule 19 (env_list)
+
+    env_list  go to state 31
+
+
+state 25
+
+   35 post: POST '{' . post_list '}'
+
+    $default  reduce using rule 36 (post_list)
+
+    post_list  go to state 32
+
+
+state 26
+
+   22 options: OPTIONS '{' . option_list '}'
+
+    $default  reduce using rule 23 (option_list)
+
+    option_list  go to state 33
+
+
+state 27
+
+   14 agent: AGENT '{' agent_directives . '}'
+   16 agent_directives: agent_directives . agent_directive
+
+    LABEL  shift, and go to state 34
+    '}'    shift, and go to state 35
+
+    agent_directive  go to state 36
+
+
+state 28
+
+   45 stage: STAGE . '(' STRING ')' '{' steps '}'
+
+    '('  shift, and go to state 37
+
+
+state 29
+
+   42 stages: STAGES '{' stage_list . '}'
+   43 stage_list: stage_list . stage
+
+    STAGE  shift, and go to state 28
+    '}'    shift, and go to state 38
+
+    stage  go to state 39
+
+
+state 30
+
+   44 stage_list: stage .
+
+    $default  reduce using rule 44 (stage_list)
+
+
+state 31
+
+   18 environment: ENVIRONMENT '{' env_list . '}'
+   20 env_list: env_list . env_assign
+
+    IDENTIFIER  shift, and go to state 40
+    '}'         shift, and go to state 41
+
+    env_assign  go to state 42
+
+
+state 32
+
+   35 post: POST '{' post_list . '}'
+   37 post_list: post_list . post_clause
+
+    SUCCESS   shift, and go to state 43
+    FAILURE   shift, and go to state 44
+    ALWAYS    shift, and go to state 45
+    UNSTABLE  shift, and go to state 46
+    '}'       shift, and go to state 47
+
+    post_clause  go to state 48
+
+
+state 33
+
+   22 options: OPTIONS '{' option_list . '}'
+   24 option_list: option_list . option
+
+    IDENTIFIER  shift, and go to state 49
+    '}'         shift, and go to state 50
+
+    option  go to state 51
+
+
+state 34
+
+   17 agent_directive: LABEL . STRING
+
+    STRING  shift, and go to state 52
+
+
+state 35
+
+   14 agent: AGENT '{' agent_directives '}' .
+
+    $default  reduce using rule 14 (agent)
+
+
+state 36
+
+   16 agent_directives: agent_directives agent_directive .
+
+    $default  reduce using rule 16 (agent_directives)
+
+
+state 37
+
+   45 stage: STAGE '(' . STRING ')' '{' steps '}'
+
+    STRING  shift, and go to state 53
+
+
+state 38
+
+   42 stages: STAGES '{' stage_list '}' .
+
+    $default  reduce using rule 42 (stages)
+
+
+state 39
+
+   43 stage_list: stage_list stage .
+
+    $default  reduce using rule 43 (stage_list)
+
+
+state 40
+
+   21 env_assign: IDENTIFIER . '=' expression
+
+    '='  shift, and go to state 54
+
+
+state 41
+
+   18 environment: ENVIRONMENT '{' env_list '}' .
+
+    $default  reduce using rule 18 (environment)
+
+
+state 42
+
+   20 env_list: env_list env_assign .
+
+    $default  reduce using rule 20 (env_list)
+
+
+state 43
+
+   38 post_clause: SUCCESS . '{' statement_list '}'
+
+    '{'  shift, and go to state 55
+
+
+state 44
+
+   39 post_clause: FAILURE . '{' statement_list '}'
+
+    '{'  shift, and go to state 56
+
+
+state 45
+
+   40 post_clause: ALWAYS . '{' statement_list '}'
+
+    '{'  shift, and go to state 57
+
+
+state 46
+
+   41 post_clause: UNSTABLE . '{' statement_list '}'
+
+    '{'  shift, and go to state 58
+
+
+state 47
+
+   35 post: POST '{' post_list '}' .
+
+    $default  reduce using rule 35 (post)
+
+
+state 48
+
+   37 post_list: post_list post_clause .
+
+    $default  reduce using rule 37 (post_list)
+
+
+state 49
+
+   25 option: IDENTIFIER . '(' call_args_opt ')'
+
+    '('  shift, and go to state 59
+
+
+state 50
+
+   22 options: OPTIONS '{' option_list '}' .
+
+    $default  reduce using rule 22 (options)
+
+
+state 51
+
+   24 option_list: option_list option .
+
+    $default  reduce using rule 24 (option_list)
+
+
+state 52
+
+   17 agent_directive: LABEL STRING .
+
+    $default  reduce using rule 17 (agent_directive)
+
+
+state 53
+
+   45 stage: STAGE '(' STRING . ')' '{' steps '}'
+
+    ')'  shift, and go to state 60
+
+
+state 54
+
+   21 env_assign: IDENTIFIER '=' . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 66
+
+
+state 55
+
+   38 post_clause: SUCCESS '{' . statement_list '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    statement_list  go to state 67
+
+
+state 56
+
+   39 post_clause: FAILURE '{' . statement_list '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    statement_list  go to state 68
+
+
+state 57
+
+   40 post_clause: ALWAYS '{' . statement_list '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    statement_list  go to state 69
+
+
+state 58
+
+   41 post_clause: UNSTABLE '{' . statement_list '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    statement_list  go to state 70
+
+
+state 59
+
+   25 option: IDENTIFIER '(' . call_args_opt ')'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 71
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    $default  reduce using rule 26 (call_args_opt)
+
+    call_args_opt  go to state 72
+    call_args      go to state 73
+    call_arg       go to state 74
+    expression     go to state 75
+
+
+state 60
+
+   45 stage: STAGE '(' STRING ')' . '{' steps '}'
+
+    '{'  shift, and go to state 76
+
+
+state 61
+
+   81 expression: STRING .
+
+    $default  reduce using rule 81 (expression)
+
+
+state 62
+
+   80 expression: IDENTIFIER .
+   85           | IDENTIFIER . '(' call_args_opt ')'
+   86           | IDENTIFIER . named_args
+   87           | IDENTIFIER . STRING
+
+    STRING      shift, and go to state 77
+    IDENTIFIER  shift, and go to state 78
+    '('         shift, and go to state 79
+
+    STRING      [reduce using rule 80 (expression)]
+    IDENTIFIER  [reduce using rule 80 (expression)]
+    $default    reduce using rule 80 (expression)
+
+    named_args  go to state 80
+    named_arg   go to state 81
+
+
+state 63
+
+   82 expression: NUMBER .
+
+    $default  reduce using rule 82 (expression)
+
+
+state 64
+
+   83 expression: TRUE .
+
+    $default  reduce using rule 83 (expression)
+
+
+state 65
+
+   84 expression: FALSE .
+
+    $default  reduce using rule 84 (expression)
+
+
+state 66
+
+   21 env_assign: IDENTIFIER '=' expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 21 (env_assign)
+
+
+state 67
+
+   38 post_clause: SUCCESS '{' statement_list . '}'
+   54 statement_list: statement_list . statement
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+    '}'         shift, and go to state 90
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 68
+
+   39 post_clause: FAILURE '{' statement_list . '}'
+   54 statement_list: statement_list . statement
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+    '}'         shift, and go to state 99
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 69
+
+   40 post_clause: ALWAYS '{' statement_list . '}'
+   54 statement_list: statement_list . statement
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+    '}'         shift, and go to state 100
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 70
+
+   41 post_clause: UNSTABLE '{' statement_list . '}'
+   54 statement_list: statement_list . statement
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+    '}'         shift, and go to state 101
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 71
+
+   31 call_arg: IDENTIFIER . ':' expression
+   80 expression: IDENTIFIER .
+   85           | IDENTIFIER . '(' call_args_opt ')'
+   86           | IDENTIFIER . named_args
+   87           | IDENTIFIER . STRING
+
+    STRING      shift, and go to state 77
+    IDENTIFIER  shift, and go to state 78
+    '('         shift, and go to state 79
+    ':'         shift, and go to state 102
+
+    $default  reduce using rule 80 (expression)
+
+    named_args  go to state 80
+    named_arg   go to state 81
+
+
+state 72
+
+   25 option: IDENTIFIER '(' call_args_opt . ')'
+
+    ')'  shift, and go to state 103
+
+
+state 73
+
+   27 call_args_opt: call_args .
+   29 call_args: call_args . ',' call_arg
+
+    ','  shift, and go to state 104
+
+    $default  reduce using rule 27 (call_args_opt)
+
+
+state 74
+
+   28 call_args: call_arg .
+
+    $default  reduce using rule 28 (call_args)
+
+
+state 75
+
+   30 call_arg: expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 30 (call_arg)
+
+
+state 76
+
+   45 stage: STAGE '(' STRING ')' '{' . steps '}'
+
+    STEPS  shift, and go to state 105
+
+    steps  go to state 106
+
+
+state 77
+
+   87 expression: IDENTIFIER STRING .
+
+    $default  reduce using rule 87 (expression)
+
+
+state 78
+
+   34 named_arg: IDENTIFIER . ':' expression
+
+    ':'  shift, and go to state 107
+
+
+state 79
+
+   85 expression: IDENTIFIER '(' . call_args_opt ')'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 71
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    $default  reduce using rule 26 (call_args_opt)
+
+    call_args_opt  go to state 108
+    call_args      go to state 73
+    call_arg       go to state 74
+    expression     go to state 75
+
+
+state 80
+
+   33 named_args: named_args . ',' named_arg
+   86 expression: IDENTIFIER named_args .
+
+    ','  shift, and go to state 109
+
+    ','       [reduce using rule 86 (expression)]
+    $default  reduce using rule 86 (expression)
+
+
+state 81
+
+   32 named_args: named_arg .
+
+    $default  reduce using rule 32 (named_args)
+
+
+state 82
+
+   90 expression: expression EQEQ . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 110
+
+
+state 83
+
+   91 expression: expression NEQ . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 111
+
+
+state 84
+
+   88 expression: expression '<' . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 112
+
+
+state 85
+
+   89 expression: expression '>' . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 113
+
+
+state 86
+
+   63 assignment: IDENTIFIER . '=' expression
+   65 ident_call_stmt: IDENTIFIER . '(' call_args_opt ')'
+   66                | IDENTIFIER . named_args
+   67                | IDENTIFIER . STRING
+   80 expression: IDENTIFIER .
+   85           | IDENTIFIER . '(' call_args_opt ')'
+   86           | IDENTIFIER . named_args
+   87           | IDENTIFIER . STRING
+
+    STRING      shift, and go to state 114
+    IDENTIFIER  shift, and go to state 78
+    '='         shift, and go to state 115
+    '('         shift, and go to state 116
+
+    STRING      [reduce using rule 80 (expression)]
+    IDENTIFIER  [reduce using rule 80 (expression)]
+    $default    reduce using rule 80 (expression)
+
+    named_args  go to state 117
+    named_arg   go to state 81
+
+
+state 87
+
+   61 if_statement: IF . '(' expression ')' '{' statement_list '}'
+   62             | IF . '(' expression ')' '{' statement_list '}' ELSE '{' statement_list '}'
+
+    '('  shift, and go to state 118
+
+
+state 88
+
+   64 declaration: DEF . IDENTIFIER '=' expression
+
+    IDENTIFIER  shift, and go to state 119
+
+
+state 89
+
+   68 for_statement: FOR . '(' for_init_opt ';' for_cond_opt ';' for_update_opt ')' '{' statement_list '}'
+
+    '('  shift, and go to state 120
+
+
+state 90
+
+   38 post_clause: SUCCESS '{' statement_list '}' .
+
+    $default  reduce using rule 38 (post_clause)
+
+
+state 91
+
+   54 statement_list: statement_list statement .
+
+    $default  reduce using rule 54 (statement_list)
+
+
+state 92
+
+   55 statement: if_statement .
+
+    $default  reduce using rule 55 (statement)
+
+
+state 93
+
+   56 statement: assignment .
+
+    $default  reduce using rule 56 (statement)
+
+
+state 94
+
+   58 statement: declaration .
+
+    $default  reduce using rule 58 (statement)
+
+
+state 95
+
+   59 statement: ident_call_stmt .
+
+    $default  reduce using rule 59 (statement)
+
+
+state 96
+
+   60 statement: for_statement .
+
+    $default  reduce using rule 60 (statement)
+
+
+state 97
+
+   57 statement: expression_stmt .
+
+    $default  reduce using rule 57 (statement)
+
+
+state 98
+
+   79 expression_stmt: expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 79 (expression_stmt)
+
+
+state 99
+
+   39 post_clause: FAILURE '{' statement_list '}' .
+
+    $default  reduce using rule 39 (post_clause)
+
+
+state 100
+
+   40 post_clause: ALWAYS '{' statement_list '}' .
+
+    $default  reduce using rule 40 (post_clause)
+
+
+state 101
+
+   41 post_clause: UNSTABLE '{' statement_list '}' .
+
+    $default  reduce using rule 41 (post_clause)
+
+
+state 102
+
+   31 call_arg: IDENTIFIER ':' . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 121
+
+
+state 103
+
+   25 option: IDENTIFIER '(' call_args_opt ')' .
+
+    $default  reduce using rule 25 (option)
+
+
+state 104
+
+   29 call_args: call_args ',' . call_arg
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 71
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    call_arg    go to state 122
+    expression  go to state 75
+
+
+state 105
+
+   46 steps: STEPS . '{' step_list '}'
+
+    '{'  shift, and go to state 123
+
+
+state 106
+
+   45 stage: STAGE '(' STRING ')' '{' steps . '}'
+
+    '}'  shift, and go to state 124
+
+
+state 107
+
+   34 named_arg: IDENTIFIER ':' . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 125
+
+
+state 108
+
+   85 expression: IDENTIFIER '(' call_args_opt . ')'
+
+    ')'  shift, and go to state 126
+
+
+state 109
+
+   33 named_args: named_args ',' . named_arg
+
+    IDENTIFIER  shift, and go to state 78
+
+    named_arg  go to state 127
+
+
+state 110
+
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   90           | expression EQEQ expression .
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    EQEQ      [reduce using rule 90 (expression)]
+    NEQ       [reduce using rule 90 (expression)]
+    '<'       [reduce using rule 90 (expression)]
+    '>'       [reduce using rule 90 (expression)]
+    $default  reduce using rule 90 (expression)
+
+
+state 111
+
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+   91           | expression NEQ expression .
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    EQEQ      [reduce using rule 91 (expression)]
+    NEQ       [reduce using rule 91 (expression)]
+    '<'       [reduce using rule 91 (expression)]
+    '>'       [reduce using rule 91 (expression)]
+    $default  reduce using rule 91 (expression)
+
+
+state 112
+
+   88 expression: expression . '<' expression
+   88           | expression '<' expression .
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    EQEQ      [reduce using rule 88 (expression)]
+    NEQ       [reduce using rule 88 (expression)]
+    '<'       [reduce using rule 88 (expression)]
+    '>'       [reduce using rule 88 (expression)]
+    $default  reduce using rule 88 (expression)
+
+
+state 113
+
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   89           | expression '>' expression .
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    EQEQ      [reduce using rule 89 (expression)]
+    NEQ       [reduce using rule 89 (expression)]
+    '<'       [reduce using rule 89 (expression)]
+    '>'       [reduce using rule 89 (expression)]
+    $default  reduce using rule 89 (expression)
+
+
+state 114
+
+   67 ident_call_stmt: IDENTIFIER STRING .
+   87 expression: IDENTIFIER STRING .
+
+    STRING      reduce using rule 67 (ident_call_stmt)
+    STRING      [reduce using rule 87 (expression)]
+    IDENTIFIER  reduce using rule 67 (ident_call_stmt)
+    IDENTIFIER  [reduce using rule 87 (expression)]
+    NUMBER      reduce using rule 67 (ident_call_stmt)
+    NUMBER      [reduce using rule 87 (expression)]
+    IF          reduce using rule 67 (ident_call_stmt)
+    IF          [reduce using rule 87 (expression)]
+    TRUE        reduce using rule 67 (ident_call_stmt)
+    TRUE        [reduce using rule 87 (expression)]
+    FALSE       reduce using rule 67 (ident_call_stmt)
+    FALSE       [reduce using rule 87 (expression)]
+    DEF         reduce using rule 67 (ident_call_stmt)
+    DEF         [reduce using rule 87 (expression)]
+    FOR         reduce using rule 67 (ident_call_stmt)
+    FOR         [reduce using rule 87 (expression)]
+    EQEQ        reduce using rule 87 (expression)
+    NEQ         reduce using rule 87 (expression)
+    '}'         reduce using rule 67 (ident_call_stmt)
+    '}'         [reduce using rule 87 (expression)]
+    '<'         reduce using rule 87 (expression)
+    '>'         reduce using rule 87 (expression)
+    $default    reduce using rule 67 (ident_call_stmt)
+
+
+state 115
+
+   63 assignment: IDENTIFIER '=' . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 128
+
+
+state 116
+
+   65 ident_call_stmt: IDENTIFIER '(' . call_args_opt ')'
+   85 expression: IDENTIFIER '(' . call_args_opt ')'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 71
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    $default  reduce using rule 26 (call_args_opt)
+
+    call_args_opt  go to state 129
+    call_args      go to state 73
+    call_arg       go to state 74
+    expression     go to state 75
+
+
+state 117
+
+   33 named_args: named_args . ',' named_arg
+   66 ident_call_stmt: IDENTIFIER named_args .
+   86 expression: IDENTIFIER named_args .
+
+    ','  shift, and go to state 109
+
+    STRING      reduce using rule 66 (ident_call_stmt)
+    STRING      [reduce using rule 86 (expression)]
+    IDENTIFIER  reduce using rule 66 (ident_call_stmt)
+    IDENTIFIER  [reduce using rule 86 (expression)]
+    NUMBER      reduce using rule 66 (ident_call_stmt)
+    NUMBER      [reduce using rule 86 (expression)]
+    IF          reduce using rule 66 (ident_call_stmt)
+    IF          [reduce using rule 86 (expression)]
+    TRUE        reduce using rule 66 (ident_call_stmt)
+    TRUE        [reduce using rule 86 (expression)]
+    FALSE       reduce using rule 66 (ident_call_stmt)
+    FALSE       [reduce using rule 86 (expression)]
+    DEF         reduce using rule 66 (ident_call_stmt)
+    DEF         [reduce using rule 86 (expression)]
+    FOR         reduce using rule 66 (ident_call_stmt)
+    FOR         [reduce using rule 86 (expression)]
+    EQEQ        reduce using rule 86 (expression)
+    NEQ         reduce using rule 86 (expression)
+    '}'         reduce using rule 66 (ident_call_stmt)
+    '}'         [reduce using rule 86 (expression)]
+    '<'         reduce using rule 86 (expression)
+    '>'         reduce using rule 86 (expression)
+    $default    reduce using rule 66 (ident_call_stmt)
+
+
+state 118
+
+   61 if_statement: IF '(' . expression ')' '{' statement_list '}'
+   62             | IF '(' . expression ')' '{' statement_list '}' ELSE '{' statement_list '}'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 130
+
+
+state 119
+
+   64 declaration: DEF IDENTIFIER . '=' expression
+
+    '='  shift, and go to state 131
+
+
+state 120
+
+   68 for_statement: FOR '(' . for_init_opt ';' for_cond_opt ';' for_update_opt ')' '{' statement_list '}'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 132
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+
+    $default  reduce using rule 69 (for_init_opt)
+
+    assignment    go to state 133
+    declaration   go to state 134
+    for_init_opt  go to state 135
+    for_init      go to state 136
+    expression    go to state 137
+
+
+state 121
+
+   31 call_arg: IDENTIFIER ':' expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 31 (call_arg)
+
+
+state 122
+
+   29 call_args: call_args ',' call_arg .
+
+    $default  reduce using rule 29 (call_args)
+
+
+state 123
+
+   46 steps: STEPS '{' . step_list '}'
+
+    ECHO    shift, and go to state 138
+    SH      shift, and go to state 139
+    SCRIPT  shift, and go to state 140
+
+    step_list  go to state 141
+    step       go to state 142
+
+
+state 124
+
+   45 stage: STAGE '(' STRING ')' '{' steps '}' .
+
+    $default  reduce using rule 45 (stage)
+
+
+state 125
+
+   34 named_arg: IDENTIFIER ':' expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    EQEQ      [reduce using rule 34 (named_arg)]
+    NEQ       [reduce using rule 34 (named_arg)]
+    '<'       [reduce using rule 34 (named_arg)]
+    '>'       [reduce using rule 34 (named_arg)]
+    $default  reduce using rule 34 (named_arg)
+
+
+state 126
+
+   85 expression: IDENTIFIER '(' call_args_opt ')' .
+
+    $default  reduce using rule 85 (expression)
+
+
+state 127
+
+   33 named_args: named_args ',' named_arg .
+
+    $default  reduce using rule 33 (named_args)
+
+
+state 128
+
+   63 assignment: IDENTIFIER '=' expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 63 (assignment)
+
+
+state 129
+
+   65 ident_call_stmt: IDENTIFIER '(' call_args_opt . ')'
+   85 expression: IDENTIFIER '(' call_args_opt . ')'
+
+    ')'  shift, and go to state 143
+
+
+state 130
+
+   61 if_statement: IF '(' expression . ')' '{' statement_list '}'
+   62             | IF '(' expression . ')' '{' statement_list '}' ELSE '{' statement_list '}'
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    ')'   shift, and go to state 144
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+
+state 131
+
+   64 declaration: DEF IDENTIFIER '=' . expression
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    expression  go to state 145
+
+
+state 132
+
+   63 assignment: IDENTIFIER . '=' expression
+   80 expression: IDENTIFIER .
+   85           | IDENTIFIER . '(' call_args_opt ')'
+   86           | IDENTIFIER . named_args
+   87           | IDENTIFIER . STRING
+
+    STRING      shift, and go to state 77
+    IDENTIFIER  shift, and go to state 78
+    '='         shift, and go to state 115
+    '('         shift, and go to state 79
+
+    $default  reduce using rule 80 (expression)
+
+    named_args  go to state 80
+    named_arg   go to state 81
+
+
+state 133
+
+   72 for_init: assignment .
+
+    $default  reduce using rule 72 (for_init)
+
+
+state 134
+
+   71 for_init: declaration .
+
+    $default  reduce using rule 71 (for_init)
+
+
+state 135
+
+   68 for_statement: FOR '(' for_init_opt . ';' for_cond_opt ';' for_update_opt ')' '{' statement_list '}'
+
+    ';'  shift, and go to state 146
+
+
+state 136
+
+   70 for_init_opt: for_init .
+
+    $default  reduce using rule 70 (for_init_opt)
+
+
+state 137
+
+   73 for_init: expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 73 (for_init)
+
+
+state 138
+
+   49 step: ECHO . STRING
+
+    STRING  shift, and go to state 147
+
+
+state 139
+
+   50 step: SH . STRING
+
+    STRING  shift, and go to state 148
+
+
+state 140
+
+   51 step: SCRIPT . '{' script_body '}'
+
+    '{'  shift, and go to state 149
+
+
+state 141
+
+   46 steps: STEPS '{' step_list . '}'
+   47 step_list: step_list . step
+
+    ECHO    shift, and go to state 138
+    SH      shift, and go to state 139
+    SCRIPT  shift, and go to state 140
+    '}'     shift, and go to state 150
+
+    step  go to state 151
+
+
+state 142
+
+   48 step_list: step .
+
+    $default  reduce using rule 48 (step_list)
+
+
+state 143
+
+   65 ident_call_stmt: IDENTIFIER '(' call_args_opt ')' .
+   85 expression: IDENTIFIER '(' call_args_opt ')' .
+
+    STRING      reduce using rule 65 (ident_call_stmt)
+    STRING      [reduce using rule 85 (expression)]
+    IDENTIFIER  reduce using rule 65 (ident_call_stmt)
+    IDENTIFIER  [reduce using rule 85 (expression)]
+    NUMBER      reduce using rule 65 (ident_call_stmt)
+    NUMBER      [reduce using rule 85 (expression)]
+    IF          reduce using rule 65 (ident_call_stmt)
+    IF          [reduce using rule 85 (expression)]
+    TRUE        reduce using rule 65 (ident_call_stmt)
+    TRUE        [reduce using rule 85 (expression)]
+    FALSE       reduce using rule 65 (ident_call_stmt)
+    FALSE       [reduce using rule 85 (expression)]
+    DEF         reduce using rule 65 (ident_call_stmt)
+    DEF         [reduce using rule 85 (expression)]
+    FOR         reduce using rule 65 (ident_call_stmt)
+    FOR         [reduce using rule 85 (expression)]
+    EQEQ        reduce using rule 85 (expression)
+    NEQ         reduce using rule 85 (expression)
+    '}'         reduce using rule 65 (ident_call_stmt)
+    '}'         [reduce using rule 85 (expression)]
+    '<'         reduce using rule 85 (expression)
+    '>'         reduce using rule 85 (expression)
+    $default    reduce using rule 65 (ident_call_stmt)
+
+
+state 144
+
+   61 if_statement: IF '(' expression ')' . '{' statement_list '}'
+   62             | IF '(' expression ')' . '{' statement_list '}' ELSE '{' statement_list '}'
+
+    '{'  shift, and go to state 152
+
+
+state 145
+
+   64 declaration: DEF IDENTIFIER '=' expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 64 (declaration)
+
+
+state 146
+
+   68 for_statement: FOR '(' for_init_opt ';' . for_cond_opt ';' for_update_opt ')' '{' statement_list '}'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 62
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    $default  reduce using rule 74 (for_cond_opt)
+
+    for_cond_opt  go to state 153
+    expression    go to state 154
+
+
+state 147
+
+   49 step: ECHO STRING .
+
+    $default  reduce using rule 49 (step)
+
+
+state 148
+
+   50 step: SH STRING .
+
+    $default  reduce using rule 50 (step)
+
+
+state 149
+
+   51 step: SCRIPT '{' . script_body '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    script_body     go to state 155
+    statement_list  go to state 156
+
+
+state 150
+
+   46 steps: STEPS '{' step_list '}' .
+
+    $default  reduce using rule 46 (steps)
+
+
+state 151
+
+   47 step_list: step_list step .
+
+    $default  reduce using rule 47 (step_list)
+
+
+state 152
+
+   61 if_statement: IF '(' expression ')' '{' . statement_list '}'
+   62             | IF '(' expression ')' '{' . statement_list '}' ELSE '{' statement_list '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    statement_list  go to state 157
+
+
+state 153
+
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt . ';' for_update_opt ')' '{' statement_list '}'
+
+    ';'  shift, and go to state 158
+
+
+state 154
+
+   75 for_cond_opt: expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 75 (for_cond_opt)
+
+
+state 155
+
+   51 step: SCRIPT '{' script_body . '}'
+
+    '}'  shift, and go to state 159
+
+
+state 156
+
+   52 script_body: statement_list .
+   54 statement_list: statement_list . statement
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+
+    $default  reduce using rule 52 (script_body)
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 157
+
+   54 statement_list: statement_list . statement
+   61 if_statement: IF '(' expression ')' '{' statement_list . '}'
+   62             | IF '(' expression ')' '{' statement_list . '}' ELSE '{' statement_list '}'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+    '}'         shift, and go to state 160
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 158
+
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt ';' . for_update_opt ')' '{' statement_list '}'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 132
+    NUMBER      shift, and go to state 63
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+
+    $default  reduce using rule 76 (for_update_opt)
+
+    assignment      go to state 161
+    for_update_opt  go to state 162
+    expression      go to state 163
+
+
+state 159
+
+   51 step: SCRIPT '{' script_body '}' .
+
+    $default  reduce using rule 51 (step)
+
+
+state 160
+
+   61 if_statement: IF '(' expression ')' '{' statement_list '}' .
+   62             | IF '(' expression ')' '{' statement_list '}' . ELSE '{' statement_list '}'
+
+    ELSE  shift, and go to state 164
+
+    $default  reduce using rule 61 (if_statement)
+
+
+state 161
+
+   78 for_update_opt: assignment .
+
+    $default  reduce using rule 78 (for_update_opt)
+
+
+state 162
+
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt ';' for_update_opt . ')' '{' statement_list '}'
+
+    ')'  shift, and go to state 165
+
+
+state 163
+
+   77 for_update_opt: expression .
+   88 expression: expression . '<' expression
+   89           | expression . '>' expression
+   90           | expression . EQEQ expression
+   91           | expression . NEQ expression
+
+    EQEQ  shift, and go to state 82
+    NEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+
+    $default  reduce using rule 77 (for_update_opt)
+
+
+state 164
+
+   62 if_statement: IF '(' expression ')' '{' statement_list '}' ELSE . '{' statement_list '}'
+
+    '{'  shift, and go to state 166
+
+
+state 165
+
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt ';' for_update_opt ')' . '{' statement_list '}'
+
+    '{'  shift, and go to state 167
+
+
+state 166
+
+   62 if_statement: IF '(' expression ')' '{' statement_list '}' ELSE '{' . statement_list '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    statement_list  go to state 168
+
+
+state 167
+
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt ';' for_update_opt ')' '{' . statement_list '}'
+
+    $default  reduce using rule 53 (statement_list)
+
+    statement_list  go to state 169
+
+
+state 168
+
+   54 statement_list: statement_list . statement
+   62 if_statement: IF '(' expression ')' '{' statement_list '}' ELSE '{' statement_list . '}'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+    '}'         shift, and go to state 170
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 169
+
+   54 statement_list: statement_list . statement
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt ';' for_update_opt ')' '{' statement_list . '}'
+
+    STRING      shift, and go to state 61
+    IDENTIFIER  shift, and go to state 86
+    NUMBER      shift, and go to state 63
+    IF          shift, and go to state 87
+    TRUE        shift, and go to state 64
+    FALSE       shift, and go to state 65
+    DEF         shift, and go to state 88
+    FOR         shift, and go to state 89
+    '}'         shift, and go to state 171
+
+    statement        go to state 91
+    if_statement     go to state 92
+    assignment       go to state 93
+    declaration      go to state 94
+    ident_call_stmt  go to state 95
+    for_statement    go to state 96
+    expression_stmt  go to state 97
+    expression       go to state 98
+
+
+state 170
+
+   62 if_statement: IF '(' expression ')' '{' statement_list '}' ELSE '{' statement_list '}' .
+
+    $default  reduce using rule 62 (if_statement)
+
+
+state 171
+
+   68 for_statement: FOR '(' for_init_opt ';' for_cond_opt ';' for_update_opt ')' '{' statement_list '}' .
+
+    $default  reduce using rule 68 (for_statement)

@@ -1,0 +1,79 @@
+pipeline {
+  agent any
+  environment {
+    BUILDDIR = 'build'
+    TIMEOUT = 30
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        echo "Checking out"
+        sh 'git clone https://example.com/repo.git'
+      }
+    }
+    stage('Build & Test') {
+      steps {
+        script {
+          def result = sh(script: 'make all', returnStatus: true)
+          if (result != 0) {
+            error 'Build failed'
+          }
+        }
+      }
+    }
+    stage('Publish') {
+      steps {
+        echo "Publishing artifacts"
+      }
+    }
+  }
+  post {
+    success {
+      echo 'All good'
+    }
+    failure {
+      echo 'Something failed'
+    }
+  }
+}
+// Complex pipeline: many stages, script blocks, numeric usage
+pipeline {
+  agent any
+  stages {
+    stage("Setup") {
+      steps {
+        echo "Preparing environment"
+        sh "./scripts/setup.sh"
+      }
+    }
+
+    stage("Build") {
+      steps {
+        sh "./build.sh --optimize"
+        script {
+          buildok = true
+          attempts = 3
+        }
+      }
+    }
+
+    stage("Test") {
+      steps {
+        script {
+          passed = 0
+          if (true) {
+            passed = 1
+          }
+        }
+        sh "./run-tests.sh --all"
+      }
+    }
+
+    stage("Archive") {
+      steps {
+        sh "tar -czf build.tar.gz build/"
+        echo "Build archived"
+      }
+    }
+  }
+}

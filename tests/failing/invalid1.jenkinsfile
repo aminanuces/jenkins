@@ -1,0 +1,10 @@
+pipeline {
+  agent any
+  stages {
+    stage("Bad") {
+      steps {
+        echo "Missing closing braces"
+      }
+    }
+  
+}

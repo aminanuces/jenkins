@@ -1,0 +1,59 @@
+// Complex test that strictly follows the BNF: no agent-blocks, no options, no post, no def, no for, no named-args
+pipeline {
+  agent any
+  stages {
+    stage("Init") {
+      steps {
+        echo "Starting pipeline"
+        sh "echo init"
+      }
+    } 
+    
+    stage('Checkout') {
+      steps {
+        echo "Checking out"
+        sh 'git clone https://example.com/repo.git'
+      } 
+    } 
+
+    stage("Build") {
+      steps {
+        script {
+          count = 0
+          if (true) {
+            count = 1
+            buildOk = 1
+          } else {
+            buildOk = 0
+          }
+        }
+        sh "make build"
+      }
+    }
+
+    stage("Test") {
+      steps {
+        script {
+          testsPassed = 0
+          if (count) {
+            testsPassed = 1
+          }
+        }
+        sh "make test"
+      }
+    }
+
+    stage("Deploy") {
+      steps {
+        script {
+          if (testsPassed) {
+            result123 = "deployed"
+          } else {
+            result123 = "skipped"
+          }
+        }
+        echo "Done"
+      }
+    }
+  }
+}

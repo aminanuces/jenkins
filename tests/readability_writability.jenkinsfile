@@ -1,0 +1,142 @@
+// Consolidated readability/writability examples for evaluation
+pipeline {
+  agent any
+  stages {
+    stage("ReadableExample") {
+      steps {
+        echo "Compiling sources"
+        sh "make all"
+      }
+    }
+
+    stage("WritableExample") {
+      steps {
+        script {
+          testsok = true
+          if (testsok) { deployready = true }
+        }
+      }
+    }
+
+    stage("StringsAndEscapes") {
+      steps {
+        echo "A string with \"escaped quotes\" inside"
+        echo 'A single-quoted string with \'escaped\' content'
+      }
+    }
+  }
+}
+
+// Additional readability/writability examples consolidated from other tests
+
+// Comments and whitespace
+// Single-line and block comments should be tolerated and not affect structure
+pipeline {
+  agent any
+  /* block comment before stages */
+  stages {
+    stage("WhitespaceAndComments") {
+      steps {
+        // Single-line comment inside steps
+        echo "This line is followed by blank lines"
+
+        sh "echo done"
+      }
+    }
+  }
+}
+
+// Complex script example (nested ifs) to show writability concerns
+pipeline {
+  agent 'any'
+  stages {
+    stage("ComplexScriptExample") {
+      steps {
+        script {
+          count = 0
+          if (true) {
+            count = 1
+            if (false) {
+              nested = 'inner'
+            } else {
+              nested = "inner-else"
+            }
+          }
+          flag = true
+        }
+      }
+    }
+  }
+}
+
+// Identifier naming and variable style
+pipeline {
+  agent any
+  stages {
+    stage("IdentifiersExample") {
+      steps {
+        script {
+          var1 = 'one'
+          var2 = "two"
+          var34 = true
+          if (var34) {
+            result123 = var1
+          }
+        }
+      }
+    }
+  }
+}
+
+// Numeric literal usage
+pipeline {
+  agent any
+  stages {
+    stage("NumericExample") {
+      steps {
+        script {
+          count = 42
+          pi = 3.14
+          if (count) { ok = true }
+          threshold = 0.5
+        }
+      }
+    }
+  }
+}
+
+// Multi-stage example (larger pipeline)
+pipeline {
+  agent any
+  stages {
+    stage("BuildMulti") {
+      steps {
+        echo "Compiling sources"
+        sh "make all"
+      }
+    }
+
+    stage("TestMulti") {
+      steps {
+        sh "make test"
+        script {
+          testspassed = true
+          if (testspassed) {
+            result = 'ok'
+          }
+        }
+      }
+    }
+
+    stage("DeployMulti") {
+      steps {
+        echo 'Deploying to staging'
+        sh "./deploy.sh --env=staging"
+      }
+    }
+  }
+}
+
+// Minimal valid pipeline examples
+pipeline { agent any stages { stage("V1") { steps { echo "ok" } } } }
+pipeline { agent any stages { stage("V2") { steps { sh "true" } } } }

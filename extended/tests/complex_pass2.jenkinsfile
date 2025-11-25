@@ -1,0 +1,57 @@
+pipeline {
+  agent {
+    label 'linux && docker'
+  }
+  options {
+    timeout(time: 1, unit: 'HOURS')
+    retry(3)
+  }
+  stages {
+    stage('Matrix') {
+      steps {
+        script {
+          for (int i = 0; i < 2; i++) {
+            echo "Iteration ${i}"
+          }
+        }
+      }
+    }
+    stage('Archive') {
+      steps {
+        archiveArtifacts artifacts: '**/target/*.jar'
+      }
+    }
+  }
+}
+// Another complex, but valid pipeline using multiple script blocks
+pipeline {
+  agent 'any'
+  stages {
+    stage("Lint") {
+      steps {
+        sh "./scripts/lint.sh"
+      }
+    }
+
+    stage("Integration") {
+      steps {
+        script {
+          envready = true
+          if (envready) {
+            deployphase = 'staging'
+          }
+        }
+        sh "./deploy.sh $deployphase"
+      }
+    }
+
+    stage("Cleanup") {
+      steps {
+        script {
+          status = 'done'
+        }
+        echo "Cleanup finished"
+      }
+    }
+  }
+}
