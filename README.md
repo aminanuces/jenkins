@@ -8,7 +8,6 @@ Contents
 - `jenkins.l` — core Flex lexer tokenizing keywords, identifiers and quoted strings.
 - `Makefile` — top-level build and `test` targets for the core parser.
 - `tests/` — example `.jenkinsfile` files (valid and invalid) used for readability/writability evaluation.
-- `extended/` — a separate workspace containing an extended/experimental grammar, lexer and Makefile for parsing more realistic Jenkins/Groovy idioms. See the `extended/` folder for instructions.
 
 ## Build
 
@@ -80,4 +79,5 @@ make clean
 - The core parser prints informational messages when it sees `agent`, `stage`, `step`, and script statements.
 - The core grammar follows a strict BNF and is intentionally conservative; it prints parse events rather than building a structured AST.
 - Script support in the core parser is minimal (assignments, `if`/`else`, simple expressions) to keep the grammar deterministic and suitable for evaluation.
+
 # jenkins
